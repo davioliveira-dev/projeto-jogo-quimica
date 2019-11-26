@@ -45,6 +45,7 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
     private int framesGameOver = 0;
     private boolean restartGame = false;
     public Menu menu;
+    private int framesOnScreen = 0;
 
     public Game() {
         rand = new Random();
@@ -167,6 +168,9 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
         g.setFont(new Font("arial",Font.BOLD,25));
         g.setColor(Color.WHITE);
         g.drawString("Ammo: "+player.ammo, 580, 30);
+        g.setFont(new Font("arial",Font.BOLD,22));
+        g.setColor(Color.WHITE);
+        g.drawString("FPS: "+framesOnScreen, 580, 50);
         if(gameState == "GAME_OVER")
         {
             Graphics2D g2 = (Graphics2D) g;
@@ -210,7 +214,7 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
             }
             if(System.currentTimeMillis() - timer >= 1000)
             {
-                System.out.println("FPS: "+frames);
+                framesOnScreen = frames;
                 frames = 0;
                 timer+=1000;
             }
