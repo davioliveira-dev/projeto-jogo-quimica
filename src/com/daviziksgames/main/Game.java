@@ -6,6 +6,7 @@ import com.daviziksgames.entities.Entity;
 import com.daviziksgames.entities.Player;
 import com.daviziksgames.graficos.Spritesheet;
 import com.daviziksgames.graficos.UI;
+import com.daviziksgames.graficos.Alert;
 import com.daviziksgames.world.World;
 
 import java.awt.*;
@@ -18,7 +19,6 @@ import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
-
 import javax.swing.*;
 
 public class Game extends Canvas implements Runnable, KeyListener, MouseListener {
@@ -46,6 +46,9 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
     private boolean restartGame = false;
     public Menu menu;
     private int framesOnScreen = 0;
+    public static boolean teste = false;
+    public static Alert alert;
+    
 
     public Game() {
         rand = new Random();
@@ -121,7 +124,8 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
             this.framesGameOver++;
             if(this.framesGameOver == 30)
             {
-            	this.framesGameOver = 0;
+                this.framesGameOver = 0;
+
             	if(this.showMessageGameOver)
             	{
             		this.showMessageGameOver = false;
@@ -151,7 +155,7 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
             return;
         }
         Graphics g = image.getGraphics();
-        g.setColor(new Color(0,0, 0));
+        g.setColor(new Color(0,0,0));
         g.fillRect(0, 0, WIDTH, HEIGHT);
         world.render(g);
         for (int i = 0; i < entities.size(); i++){
@@ -189,11 +193,20 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
         {
             menu.render(g);
         }
+        if(teste){
+            Graphics2D g2 = (Graphics2D) g;
+            g2.setColor(new Color(0,0,0,200));
+            g2.fillRect( WIDTH * SCALE / 2 - 300 , 50 , 380 , 50);
+            g.setFont(new Font("arial",Font.BOLD,19));
+            g.setColor(Color.WHITE);
+            g.drawString("Parabéns, você pegou uma bala!",WIDTH*SCALE / 2 - 285, 80);
+            g.setColor(new Color(0,0,0));
+            g2.setColor(new Color(0,0,0,0));
+        }
         bs.show();
     }
     @Override
     public void run() {
-    	Sound.music.loop();
         long lastTime = System.nanoTime();
         double amountOfTicks = 60.0;
         double ns = 1000000000 / amountOfTicks;
@@ -223,7 +236,7 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
     }
 
     public static void main(String[] args) {
-        // TODO Auto-generated method stub
+
         Game game = new Game();
         game.start();
     }

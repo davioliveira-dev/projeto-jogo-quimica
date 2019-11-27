@@ -8,9 +8,6 @@ import java.awt.image.BufferedImage;
 public class Tile {
     public static BufferedImage TILE_FLOOR = Game.spritesheet.getSprite(0,0,16,16);
     public static BufferedImage TILE_WALL = Game.spritesheet.getSprite(16,0,16,16);
-    public static BufferedImage TILE_DOOR = Game.spritesheet.getSprite(0, 0, 0, 0);
-    public static BufferedImage TILE_BOX = Game.spritesheet.getSprite(0, 0, 0, 0);
-    public static BufferedImage TILE_KEY = Game.spritesheet.getSprite(0, 0, 0, 0);
     
 
     private BufferedImage sprite;

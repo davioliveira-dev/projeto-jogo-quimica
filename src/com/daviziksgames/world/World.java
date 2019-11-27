@@ -26,8 +26,11 @@ public class World {
             map.getRGB(0,0,map.getWidth(),map.getHeight(),pixels,0,map.getWidth());
             for(int xx = 0; xx < map.getWidth();xx++){
                 for(int yy = 0; yy < map.getHeight();yy++){
+
                     int pixelAtual = pixels[xx + (yy * map.getWidth())];
+
                     tiles[xx + (yy*WIDTH)] = new FloorTile(xx*TILE_SIZE,yy*TILE_SIZE,Tile.TILE_FLOOR);
+
                     if(pixelAtual == 0xFF000000)
                     {
                         //Floor(Chao)
@@ -69,6 +72,13 @@ public class World {
                         Game.entities.add(new Ammo(xx*TILE_SIZE,yy*TILE_SIZE,16,16, Entity.BULLET_EN));
 
                     }
+                    /*else if(pixelAtual == 0xFF//cor//){
+                        Game.entities.add(new Chest(xx*TILE_SIZE,yy*TILE_SIZE,16,16,Entity.CHEST_EN));
+                    }*/
+                    /*else if(pixelAtual == 0xFF//cor//){
+                        Game.entities.add(new Key(xx*TILE_SIZE,yy*TILE_SIZE,16,16,Entity.KEY_EN));
+                    }*/
+                    
 
                 }
             }
