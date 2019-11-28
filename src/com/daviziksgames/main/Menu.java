@@ -82,5 +82,6 @@ public class Menu {
         {
             g.drawString(">",(Game.WIDTH*Game.SCALE) / 2 - 90,297);
         }
+
     }
 }

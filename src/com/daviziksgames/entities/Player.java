@@ -3,7 +3,6 @@ package com.daviziksgames.entities;
 import com.daviziksgames.main.Game;
 import com.daviziksgames.world.Camera;
 import com.daviziksgames.world.World;
-import com.daviziksgames.graficos.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 
@@ -176,7 +175,6 @@ public class Player extends Entity{
                 {
                 	ammo+=10;
                     Game.entities.remove(currentEntity);
-                    Game.alert = new Alert(5);
                     Game.teste = true;
                 }
             }

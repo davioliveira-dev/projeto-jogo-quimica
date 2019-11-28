@@ -16,14 +16,14 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.image.BufferStrategy;
 import java.awt.image.BufferedImage;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
+import java.util.Timer;
+import java.util.*;
 import javax.swing.*;
 
 public class Game extends Canvas implements Runnable, KeyListener, MouseListener {
-	private static final long serialVersionUID = 1L;
-	public static JFrame frame;
+    private static final long serialVersionUID = 1L;
+    public static JFrame frame;
     private Thread thread;
     private boolean isRunning;
     public static final int WIDTH = 240;
@@ -38,7 +38,7 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
     public static Player player;
     public static Random rand;
     public UI ui;
-    private  int CUR_LEVEL = 1;
+    private int CUR_LEVEL = 1;
     private int MAX_LEVEL = 2;
     public static String gameState = "MENU";
     private boolean showMessageGameOver = true;
@@ -48,26 +48,27 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
     private int framesOnScreen = 0;
     public static boolean teste = false;
     public static Alert alert;
-    
+    private boolean ok;
 
     public Game() {
         rand = new Random();
         addKeyListener(this);
         addMouseListener(this);
-        this.setPreferredSize(new Dimension(WIDTH*SCALE,HEIGHT*SCALE));
+        this.setPreferredSize(new Dimension(WIDTH * SCALE, HEIGHT * SCALE));
         initFrame();
         ui = new UI();
-        image = new BufferedImage(WIDTH,HEIGHT,BufferedImage.TYPE_INT_RGB);
+        image = new BufferedImage(WIDTH, HEIGHT, BufferedImage.TYPE_INT_RGB);
         entities = new ArrayList<Entity>();
         enemies = new ArrayList<Enemy>();
         bullets = new ArrayList<Bullet>();
         spritesheet = new Spritesheet("res/spritesheet.png");
-        player = new Player(0,0,16,16,spritesheet.getSprite(32,0,16,16));
+        player = new Player(0, 0, 16, 16, spritesheet.getSprite(32, 0, 16, 16));
         entities.add(player);
         world = new World("res/level1.png");
         menu = new Menu();
 
     }
+
     public void initFrame() {
         frame = new JFrame("Jogo ZERO1");
         frame.add(this);
@@ -77,134 +78,126 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setVisible(true);
     }
+
     public synchronized void start() {
         thread = new Thread(this);
         isRunning = true;
         thread.start();
 
     }
+
     public synchronized void stop() {
         isRunning = false;
-        try
-        {
+        try {
             thread.join();
-        } catch (InterruptedException e)
-        {
+        } catch (InterruptedException e) {
             e.printStackTrace();
         }
     }
+
     public void tick() {
-        if(gameState == "MENU")
-        {
+        if (gameState == "MENU") {
             menu.tick();
         }
-        if(gameState == "NORMAL")
-        {
+        if (gameState == "NORMAL") {
             this.restartGame = false;
-            for (int i = 0; i < entities.size(); i++){
+            for (int i = 0; i < entities.size(); i++) {
                 Entity e = entities.get(i);
                 e.tick();
             }
-            for(int i = 0; i < bullets.size(); i++){
+            for (int i = 0; i < bullets.size(); i++) {
                 bullets.get(i).tick();
             }
-            if(enemies.size() == 0)
-            {
+            if (enemies.size() == 0) {
                 CUR_LEVEL++;
-                if(CUR_LEVEL > MAX_LEVEL)
-                {
+                if (CUR_LEVEL > MAX_LEVEL) {
                     CUR_LEVEL = 1;
                 }
-                String newWorld = "level"+CUR_LEVEL+".png";
+                String newWorld = "level" + CUR_LEVEL + ".png";
                 World.restartGame(newWorld);
             }
         }
-        if(gameState == "GAME_OVER")
-        {
+        if (gameState == "GAME_OVER") {
             this.framesGameOver++;
-            if(this.framesGameOver == 30)
-            {
+            if (this.framesGameOver == 30) {
                 this.framesGameOver = 0;
 
-            	if(this.showMessageGameOver)
-            	{
-            		this.showMessageGameOver = false;
-            	}
-            	else
-            	{
-            		this.showMessageGameOver = true;
-            	}
+                if (this.showMessageGameOver) {
+                    this.showMessageGameOver = false;
+                } else {
+                    this.showMessageGameOver = true;
+                }
             }
         }
-        
-        if(restartGame)
-        {
-        	this.restartGame = false;
-        	Game.gameState = "NORMAL";
-        	CUR_LEVEL = 1;
-        	String newWorld = "level"+CUR_LEVEL+".png";
+
+        if (restartGame) {
+            this.restartGame = false;
+            Game.gameState = "NORMAL";
+            CUR_LEVEL = 1;
+            String newWorld = "level" + CUR_LEVEL + ".png";
             World.restartGame(newWorld);
         }
     }
 
     public void render() {
         BufferStrategy bs = this.getBufferStrategy();
-        if(bs == null)
-        {
+        if (bs == null) {
             this.createBufferStrategy(3);
             return;
         }
         Graphics g = image.getGraphics();
-        g.setColor(new Color(0,0,0));
+        g.setColor(new Color(0, 0, 0));
         g.fillRect(0, 0, WIDTH, HEIGHT);
         world.render(g);
-        for (int i = 0; i < entities.size(); i++){
+        for (int i = 0; i < entities.size(); i++) {
             Entity e = entities.get(i);
             e.render(g);
         }
-        for(int i = 0; i < bullets.size(); i++){
+        for (int i = 0; i < bullets.size(); i++) {
             bullets.get(i).render(g);
         }
         ui.render(g);
         g.dispose();
         g = bs.getDrawGraphics();
-        g.drawImage(image,0,0,WIDTH*SCALE,HEIGHT*SCALE,null);
-        g.setFont(new Font("arial",Font.BOLD,25));
+        g.drawImage(image, 0, 0, WIDTH * SCALE, HEIGHT * SCALE, null);
+        g.setFont(new Font("arial", Font.BOLD, 25));
         g.setColor(Color.WHITE);
-        g.drawString("Ammo: "+player.ammo, 580, 30);
-        g.setFont(new Font("arial",Font.BOLD,22));
+        g.drawString("Ammo: " + player.ammo, 580, 30);
+        g.setFont(new Font("arial", Font.BOLD, 22));
         g.setColor(Color.WHITE);
-        g.drawString("FPS: "+framesOnScreen, 580, 50);
-        if(gameState == "GAME_OVER")
-        {
+        g.drawString("FPS: " + framesOnScreen, 580, 50);
+        if (gameState == "GAME_OVER") {
             Graphics2D g2 = (Graphics2D) g;
-            g2.setColor(new Color(0,0,0,100));
-            g2.fillRect(0,0,WIDTH*SCALE,HEIGHT*SCALE);
-            g.setFont(new Font("arial",Font.BOLD,40));
+            g2.setColor(new Color(0, 0, 0, 100));
+            g2.fillRect(0, 0, WIDTH * SCALE, HEIGHT * SCALE);
+            g.setFont(new Font("arial", Font.BOLD, 40));
             g.setColor(Color.WHITE);
-            g.drawString("GAME OVER!",WIDTH*SCALE / 2 - 140, HEIGHT*SCALE / 2);
-            g.setFont(new Font("arial",Font.BOLD,30));
-            if(showMessageGameOver)
-            {
-                g.drawString("PRESSIONE ENTER PARA REINICIAR",WIDTH*SCALE / 2 - 300, HEIGHT*SCALE / 2 + 50);
+            g.drawString("GAME OVER!", WIDTH * SCALE / 2 - 140, HEIGHT * SCALE / 2);
+            g.setFont(new Font("arial", Font.BOLD, 30));
+            if (showMessageGameOver) {
+                g.drawString("PRESSIONE ENTER PARA REINICIAR", WIDTH * SCALE / 2 - 300, HEIGHT * SCALE / 2 + 50);
             }
         }
-        if(gameState == "MENU")
-        {
+        if (gameState == "MENU") {
             menu.render(g);
         }
-        if(teste){
-            Graphics2D g2 = (Graphics2D) g;
-            g2.setColor(new Color(0,0,0,200));
-            g2.fillRect( WIDTH * SCALE / 2 - 300 , 50 , 380 , 50);
-            g.setFont(new Font("arial",Font.BOLD,19));
-            g.setColor(Color.WHITE);
-            g.drawString("Parabéns, você pegou uma bala!",WIDTH*SCALE / 2 - 285, 80);
-            g.setColor(new Color(0,0,0));
-            g2.setColor(new Color(0,0,0,0));
+        if (teste) {
+            renderizarMensagem(g);
         }
         bs.show();
     }
+
+    public void renderizarMensagem(Graphics g) {
+        Graphics2D g2 = (Graphics2D) g;
+        g2.setColor(new Color(0, 0, 0, 200));
+        g2.fillRect((Game.WIDTH * Game.SCALE) / 2 - 300, 50, 380, 50);
+        g.setFont(new Font("arial", Font.BOLD, 19));
+        g.setColor(Color.WHITE);
+        g.drawString("Parabéns, você pegou uma bala!", (Game.WIDTH * Game.SCALE) / 2 - 285, 80);
+
+    }
+
+
     @Override
     public void run() {
         long lastTime = System.nanoTime();
@@ -270,6 +263,7 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
         }
         if(e.getKeyCode() == KeyEvent.VK_ENTER)
         {
+            ok = true;
         	if(gameState == "MENU")
             {
                 menu.enter = true;

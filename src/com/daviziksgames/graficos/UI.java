@@ -15,7 +15,6 @@ public class UI {
         g.setColor(Color.white);
         g.setFont(new Font("Arial",Font.BOLD,7));
         g.drawString((int)(Game.player.life) + "/" + (int)(Player.maxLife),18,11);
-
     }
 
 }
