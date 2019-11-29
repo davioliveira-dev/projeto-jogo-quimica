@@ -197,6 +197,11 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
 
     }
 
+    public void paintComponent(Graphics g){
+        super.paintComponent(g);
+        
+    }
+
 
     @Override
     public void run() {
