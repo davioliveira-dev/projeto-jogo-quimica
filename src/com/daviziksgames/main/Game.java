@@ -6,7 +6,6 @@ import com.daviziksgames.entities.Entity;
 import com.daviziksgames.entities.Player;
 import com.daviziksgames.graficos.Spritesheet;
 import com.daviziksgames.graficos.UI;
-import com.daviziksgames.graficos.Alert;
 import com.daviziksgames.world.World;
 
 import java.awt.*;
@@ -17,7 +16,6 @@ import java.awt.event.MouseListener;
 import java.awt.image.BufferStrategy;
 import java.awt.image.BufferedImage;
 import java.util.List;
-import java.util.Timer;
 import java.util.*;
 import javax.swing.*;
 
@@ -47,8 +45,7 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
     public Menu menu;
     private int framesOnScreen = 0;
     public static boolean teste = false;
-    public static Alert alert;
-    private boolean ok;
+    private boolean showMessage;
 
     public Game() {
         rand = new Random();
@@ -72,11 +69,13 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
     public void initFrame() {
         frame = new JFrame("Jogo ZERO1");
         frame.add(this);
+
         frame.setResizable(false);
         frame.pack();
         frame.setLocationRelativeTo(null);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setVisible(true);
+        frame.getContentPane().add(new JOptionPane());
     }
 
     public synchronized void start() {
@@ -166,6 +165,7 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
         g.setFont(new Font("arial", Font.BOLD, 22));
         g.setColor(Color.WHITE);
         g.drawString("FPS: " + framesOnScreen, 580, 50);
+
         if (gameState == "GAME_OVER") {
             Graphics2D g2 = (Graphics2D) g;
             g2.setColor(new Color(0, 0, 0, 100));
@@ -182,26 +182,23 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
             menu.render(g);
         }
         if (teste) {
-            renderizarMensagem(g);
+            showMessage = true;
+            if(showMessage){
+                message("Parabéns você pegou uma bala!");
+                showMessage = false;
+            }
+            teste = false;
+            player.right = false;
+            player.left = false;
+            player.up = false;
+            player.down = false;
         }
         bs.show();
     }
 
-    public void renderizarMensagem(Graphics g) {
-        Graphics2D g2 = (Graphics2D) g;
-        g2.setColor(new Color(0, 0, 0, 200));
-        g2.fillRect((Game.WIDTH * Game.SCALE) / 2 - 300, 50, 380, 50);
-        g.setFont(new Font("arial", Font.BOLD, 19));
-        g.setColor(Color.WHITE);
-        g.drawString("Parabéns, você pegou uma bala!", (Game.WIDTH * Game.SCALE) / 2 - 285, 80);
-
+    public void message(String message){
+        JOptionPane.showMessageDialog(frame,message);
     }
-
-    public void paintComponent(Graphics g){
-        super.paintComponent(g);
-        
-    }
-
 
     @Override
     public void run() {
@@ -268,7 +265,6 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
         }
         if(e.getKeyCode() == KeyEvent.VK_ENTER)
         {
-            ok = true;
         	if(gameState == "MENU")
             {
                 menu.enter = true;
