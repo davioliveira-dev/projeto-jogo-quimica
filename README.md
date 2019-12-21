@@ -1,6 +1,7 @@
-# ProjetoGame01Alpha
-Projeto programado em Java, trata-se de um jogo 2D com sistema de dano, colisão, animação e controle!
+# Projeto Jogo de Química em Java
 
-Jogo ainda em fase Alpha, há muitas alterações a serem feitas!
-Sistema de som ainda não está funcionando!
-Há futuras ideias para o projeto, basta checar o arquivo nomeado "Ideas"!
+Projeto programado em Java, trata-se de um jogo 2D com sistema de dano, colisão, animação e controle!
+Jogo ainda em fase Alpha, há muitas alterações a serem feitas e principalmente melhorias!
+Entre em contato comigo: davioliveira.java@gmail.com
+                        @davioliveira-dev no Instagram!
+
