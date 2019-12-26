@@ -24,7 +24,8 @@ public class Entity {
     public static BufferedImage ENEMYFEEDBACK_EN = Game.spritesheet.getSprite(144,16,16,16);
     public static BufferedImage GUN_RIGHT = Game.spritesheet.getSprite(128,0,16,16);
     public static BufferedImage GUN_LEFT = Game.spritesheet.getSprite(144,0,16,16);
-    
+    public static BufferedImage QUESTIONMARK_EN = Game.spritesheet.getSprite(0,64,16,16);
+
 
 
 

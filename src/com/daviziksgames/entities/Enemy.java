@@ -33,19 +33,19 @@ public class Enemy extends Entity{
     public void tick() {
 
         if (!this.isCollidingWithPlayer()) {
-            if ((int) x < Game.player.getX() && World.isFree((int) (x + speed), this.getY()) && !isColliding((int) (x + speed), this.getY())) {
+            if ((int) x < Game.player.getX() && World.isFree((int) (x + speed), this.getY()) && !isColliding((int) (x + speed), this.getY()) && World.doorOpen((int) (x + speed), this.getY()) && !Game.doorLocked) {
                 x += speed;
-            } else if ((int) x > Game.player.getX() && World.isFree((int) (x - speed), this.getY()) && !isColliding((int) (x - speed), this.getY())) {
+            } else if ((int) x > Game.player.getX() && World.isFree((int) (x - speed), this.getY()) && !isColliding((int) (x - speed), this.getY()) && World.doorOpen((int) (x - speed), this.getY()) && !Game.doorLocked) {
                 x -= speed;
             }
-            if ((int) y < Game.player.getY() && World.isFree(this.getX(), (int) (y + speed)) && !isColliding(this.getX(), (int) (y + speed))) {
+            if ((int) y < Game.player.getY() && World.isFree(this.getX(), (int) (y + speed)) && !isColliding(this.getX(), (int) (y + speed)) && World.doorOpen(this.getX(), (int) (y + speed)) && !Game.doorLocked) {
                 y += speed;
-            } else if ((int) y > Game.player.getY() && World.isFree(this.getX(), (int) (y - speed)) && !isColliding(this.getX(), (int) (y - speed))) {
+            } else if ((int) y > Game.player.getY() && World.isFree(this.getX(), (int) (y - speed)) && !isColliding(this.getX(), (int) (y - speed)) && World.doorOpen(this.getX(), (int) (y - speed)) && !Game.doorLocked) {
                 y -= speed;
             }
         } else {
             if (Game.rand.nextInt(100) < 10) {
-                Game.player.life -= (Game.rand.nextInt(3));
+                Game.player.life -= 8;
                 Game.player.isDamaged = true;
             }
         }

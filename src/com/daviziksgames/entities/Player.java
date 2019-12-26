@@ -26,6 +26,8 @@ public class Player extends Entity{
     public boolean shoot = false;
     public boolean mouseShoot;
     public int mX,mY;
+    public int contador = 1;
+    public static boolean resources = true;
 
 
     public Player(int x, int y, int width, int height, BufferedImage sprite) {
@@ -43,26 +45,26 @@ public class Player extends Entity{
 
     }
     public void tick(){
-    	
         moved = false;
-            if(right && World.isFree((int)(x+speed),this.getY()))
+        checkCollisionQuestionMark();
+            if(right && World.isFree((int)(x+speed),this.getY()) && World.doorOpen((int)(x+speed),this.getY()))
         {
             moved = true;
             dir = rightDir;
             x+=speed;
         }
-        else if(left && World.isFree((int)(x-speed),this.getY()))
+        else if(left && World.isFree((int)(x-speed),this.getY())&& World.doorOpen((int)(x-speed),this.getY()))
         {
             moved = true;
             dir = leftDir;
             x-=speed;
         }
-        if(up && World.isFree(this.getX(),(int)(y - speed)))
+        if(up && World.isFree(this.getX(),(int)(y - speed)) && World.doorOpen(this.getX(),(int)(y - speed)))
         {
             moved = true;
             y-=speed;
         }
-        else if(down && World.isFree(this.getX(),(int)(y + speed)))
+        else if(down && World.isFree(this.getX(),(int)(y + speed)) && World.doorOpen(this.getX(),(int)(y + speed)))
         {
             moved = true;
             y+=speed;
@@ -147,10 +149,90 @@ public class Player extends Entity{
             Game.gameState = "GAME_OVER";
         }
     }
+
+
     public void updateCamera(){
         Camera.x = Camera.clamp(this.getX() - (Game.WIDTH / 2),0, World.WIDTH*16 - Game.WIDTH);
         Camera.y = Camera.clamp(this.getY() - (Game.HEIGHT / 2),0,World.HEIGHT*16 - Game.HEIGHT);
     }
+
+    public void checkCollisionQuestionMark() {
+        for (int i = 0; i < Game.entities.size(); i++){
+            Entity currentEntity = Game.entities.get(i);
+            if(currentEntity instanceof QuestionMark)
+            {
+                if(isColliding(this,currentEntity))
+                {
+                    Game.message("Pergunta número "+Game.CUR_LEVEL+" : ",true);
+                    switch (Game.CUR_LEVEL){
+                        case 1:
+                            Game.question(Game.CUR_LEVEL,"<html>Quantos elementos existem na tabela periódica?<ul>" +
+                                    "<li>A<= 90</li>" + "<li>B<= 110</li>" + "<li>C<= 113</li>" + "<li>D<= 90</li>"+ "<li>E<= 118</li>"+
+                                    "</ul></html>","E",true);
+                            break;
+                        case 2:
+                            Game.question(Game.CUR_LEVEL,"<html>Ferro (Z = 26), manganês (Z = 25) e cromo (Z = 24) são: <ul>"+
+                                    "<li>A<= Metais Alcalinos</li>" + "<li>B<= Metais Alcalinoterrosos</li>" + "<li>C<= Elementos de Transição</li>" +
+                                    "<li>D<= Lantanídios</li>"+ "<li>E<= Calcogênios</li>"+
+                                    "</ul></html>","c",true);
+                            break;
+                        case 3:
+                            Game.question(Game.CUR_LEVEL,"<html>Qual é o número atômico do carbono?<ul>" +
+                                    "<li>A<= 8</li>"+"<li>B<= 6</li>"+"<li>C<= 7</li>"+"<li>D<= 9</li>"+"<li>E<= 5</li>","b",true);
+                            break;
+                        case 4:
+                            Game.question(Game.CUR_LEVEL,"<html>O ouro faz parte de qual grupo?<ul>" +
+                                    "<li>A <= Metais Alcalinos </li>"+"<li>B <= Família do Boro </li>"+"<li>C <= Metais de Transição </li>"+
+                                    "<li>D <= Halogênios </li>" + "<li>E <= Nenhuma das Anteriores </li>","c",true);
+                            break;
+                        case 5:
+                            Game.question(Game.CUR_LEVEL,"<html>O propanol é um exemplo de qual função orgânica: ?<ul>" +
+                                    "<li>A <= Eter </li>"+"<li>B <= Alcool </li>"+"<li>C <= Cetona </li>"+
+                                    "<li>D <= Aldeído </li>" + "<li>E <= Amida </li>","b",true);
+                            break;
+                        case 6:
+                            Game.question(Game.CUR_LEVEL,"<html>Digite a alternativa que indica corretamente o número da família" +
+                                    " e do período ocupado pelo elemento cujo número atômico é igual a 42: <ul>" +
+                                    "<li>A <= Família 1, 3º período. </li>"+"<li>B <= Família 14, 4º período </li>"+"<li>C <= Família 16, 1º período </li>"+
+                                    "<li>D <= Família 3, 4º período. </li>" + "<li>E <= Família 6, 5º período </li>","e",true);
+                            break;
+                        case 7:
+                            Game.question(Game.CUR_LEVEL,"<html>O aldeído valérico, mais conhecido por pentanal, apresenta que fórmula molecular?<ul>" +
+                                    "<li>A <= C5 H10 O </li>"+"<li>B <= C5 H5 O2 </li>"+"<li>C <= C5 H10 O2 </li>"+
+                                    "<li>D <= C5 H8 O </li>" + "<li>E <= C5 H12 O </li>","c",true);
+                            break;
+                        case 8:
+                            Game.question(Game.CUR_LEVEL,"<html>Quando você diz: Mãe, a água do café já está fervendo você está se referindo ao fenômeno da: ?<ul>" +
+                                    "<li>A <= Vaporização </li>"+"<li>B <= Ebulição </li>"+"<li>C <= Liquefação </li>"+
+                                    "<li>D <= Solidificação </li>" + "<li>E <= Nenhuma das anteriores </li>","b",true);
+                            break;
+                        case 9:
+                            //A que função a acetona pertence ?
+                            Game.question(Game.CUR_LEVEL,"<html>A que função a acetona pertence ?<ul>" +
+                                    "<li>A <= Aldeído </li>"+"<li>B <= Fenol </li>"+"<li>C <= Cetona </li>"+
+                                    "<li>D <= Enol </li>" + "<li>E <= Fenil </li>","c",true);
+                            break;
+                        case 10:
+                            Game.question(Game.CUR_LEVEL,"<html>Um balão contém em seu interior 2,0 L de gás He na temperatura de 25 °C. " +
+                                    "Esse balão foi introduzido em um recipiente com nitrogênio líquido para reduzir a temperatura do gás para -193 °C (80 K)" +
+                                    ", mantendo a pressão inalterada. Considerando o comportamento ideal do gás, o volume do balão será reduzido a aproximadamente<ul>" +
+                                    "<li>A <= 0,54 L </li>"+"<li>B <= 0,81 L </li>"+"<li>C <= 1,08 L </li>"+
+                                    "<li>D <= 1,35 L </li>" + "<li>E <= 1,60 L </li>","a",true);
+                            break;
+                    }
+                    Game.player.right = false;
+                    Game.player.left = false;
+                    Game.player.up = false;
+                    Game.player.down = false;
+                    Game.entities.remove(currentEntity);
+                    contador++;
+                }
+            }
+        }
+    }
+
+
+
     public void checkCollisionGun() {
         for (int i = 0; i < Game.entities.size(); i++){
             Entity currentEntity = Game.entities.get(i);
@@ -175,7 +257,6 @@ public class Player extends Entity{
                 {
                 	ammo+=10;
                     Game.entities.remove(currentEntity);
-                    Game.teste = true;
                 }
             }
         }

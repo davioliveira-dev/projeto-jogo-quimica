@@ -15,6 +15,7 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.image.BufferStrategy;
 import java.awt.image.BufferedImage;
+import java.io.InputStream;
 import java.util.List;
 import java.util.*;
 import javax.swing.*;
@@ -36,16 +37,19 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
     public static Player player;
     public static Random rand;
     public UI ui;
-    private int CUR_LEVEL = 1;
-    private int MAX_LEVEL = 2;
+    public static int CUR_LEVEL = 1;
+    public static int MAX_LEVEL = 10;
     public static String gameState = "MENU";
     private boolean showMessageGameOver = true;
     private int framesGameOver = 0;
     private boolean restartGame = false;
     public Menu menu;
     private int framesOnScreen = 0;
-    public static boolean teste = false;
-    private boolean showMessage;
+    public static boolean doorLocked = true;
+    public InputStream stream = ClassLoader.getSystemClassLoader().getResourceAsStream("pixelart.ttf");
+    public Font newFont;
+
+
 
     public Game() {
         rand = new Random();
@@ -181,27 +185,51 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
         if (gameState == "MENU") {
             menu.render(g);
         }
-        if (teste) {
-            showMessage = true;
-            if(showMessage){
-                message("Parabéns você pegou uma bala!");
-                showMessage = false;
-            }
-            teste = false;
-            player.right = false;
-            player.left = false;
-            player.up = false;
-            player.down = false;
-        }
+
         bs.show();
     }
 
-    public void message(String message){
-        JOptionPane.showMessageDialog(frame,message);
+
+    public static void message(String message,boolean show){
+        if(show) {
+            JOptionPane.showMessageDialog(frame, message);
+            player.left = false;
+            player.right = false;
+            player.up = false;
+            player.down = false;
+        }
+    }
+
+    public static void question(int questionNumber, String question, String answer, boolean show){
+        if(show)
+        {
+            String playerAnswer = JOptionPane.showInputDialog(question);
+            answer = answer.toLowerCase();
+            playerAnswer = playerAnswer.toLowerCase();
+            if(answer.equals(playerAnswer))
+            {
+                JOptionPane.showMessageDialog(frame,"Parabéns, você acertou a pergunta "+questionNumber+" ! Pegue as armas e se defenda!");
+                Game.doorLocked = false;
+                Game.player.life = 500;
+            }
+            else
+            {
+                JOptionPane.showMessageDialog(frame,"Você errou a pergunta "+questionNumber+", agora se prepare para morrer, SEM ARMAS, para os ZUMBIS, HAHA!");
+                player.ammo = 0;
+                Player.resources = false;
+                Game.doorLocked = false;
+            }
+            Game.player.right = false;
+            Game.player.left = false;
+            Game.player.up = false;
+            Game.player.down = false;
+        }
+
     }
 
     @Override
     public void run() {
+        Sound.music.loop();
         long lastTime = System.nanoTime();
         double amountOfTicks = 60.0;
         double ns = 1000000000 / amountOfTicks;
