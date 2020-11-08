@@ -50,9 +50,10 @@ public class Menu {
         g.fillRect(0,0, Game.WIDTH * Game.SCALE, Game.HEIGHT*Game.SCALE);
         g.setColor(Color.yellow);
         g.setFont(new Font("arial",Font.BOLD,36));
-        g.drawString(">GAME ZERO1<",(Game.WIDTH*Game.SCALE) / 2 - 160,(Game.HEIGHT*Game.SCALE) / 2 - 120);
+        g.drawString("QUIZ DE QUÍMICA",(Game.WIDTH*Game.SCALE) / 2 - 160,(Game.HEIGHT*Game.SCALE) / 2 - 120);
         g.setColor(Color.WHITE);
         g.setFont(new Font("Arial",Font.BOLD,24));
+        g.drawString("Dica: para atirar, pressione J",(Game.WIDTH*Game.SCALE) / 2 - 160,(Game.HEIGHT*Game.SCALE) / 2 - 85);
         if(!pause)
         {
             g.drawString("New Game",(Game.WIDTH*Game.SCALE) / 2 - 70,200);

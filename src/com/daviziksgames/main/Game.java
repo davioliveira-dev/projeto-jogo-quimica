@@ -48,6 +48,7 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
     public static boolean doorLocked = true;
     public InputStream stream = ClassLoader.getSystemClassLoader().getResourceAsStream("pixelart.ttf");
     public Font newFont;
+    public static boolean onMessage = false;
 
 
 
@@ -71,7 +72,7 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
     }
 
     public void initFrame() {
-        frame = new JFrame("Jogo ZERO1");
+        frame = new JFrame("Quiz de Química");
         frame.add(this);
 
         frame.setResizable(false);
@@ -197,6 +198,7 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
             player.right = false;
             player.up = false;
             player.down = false;
+            onMessage = true;
         }
     }
 
@@ -210,7 +212,8 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
             {
                 JOptionPane.showMessageDialog(frame,"Parabéns, você acertou a pergunta "+questionNumber+" ! Pegue as armas e se defenda!");
                 Game.doorLocked = false;
-                Game.player.life = 500;
+                Game.onMessage = false;
+                player.life = 999999999;
             }
             else
             {
@@ -218,6 +221,7 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
                 player.ammo = 0;
                 Player.resources = false;
                 Game.doorLocked = false;
+                Game.onMessage = false;
             }
             Game.player.right = false;
             Game.player.left = false;

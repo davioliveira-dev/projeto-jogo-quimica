@@ -33,14 +33,14 @@ public class Enemy extends Entity{
     public void tick() {
 
         if (!this.isCollidingWithPlayer()) {
-            if ((int) x < Game.player.getX() && World.isFree((int) (x + speed), this.getY()) && !isColliding((int) (x + speed), this.getY()) && World.doorOpen((int) (x + speed), this.getY()) && !Game.doorLocked) {
+            if ((int) x < Game.player.getX() && World.isFree((int) (x + speed), this.getY()) && !isColliding((int) (x + speed), this.getY()) && World.doorOpen((int) (x + speed), this.getY()) && !Game.doorLocked && !Game.onMessage) {
                 x += speed;
-            } else if ((int) x > Game.player.getX() && World.isFree((int) (x - speed), this.getY()) && !isColliding((int) (x - speed), this.getY()) && World.doorOpen((int) (x - speed), this.getY()) && !Game.doorLocked) {
+            } else if ((int) x > Game.player.getX() && World.isFree((int) (x - speed), this.getY()) && !isColliding((int) (x - speed), this.getY()) && World.doorOpen((int) (x - speed), this.getY()) && !Game.doorLocked && !Game.onMessage) {
                 x -= speed;
             }
-            if ((int) y < Game.player.getY() && World.isFree(this.getX(), (int) (y + speed)) && !isColliding(this.getX(), (int) (y + speed)) && World.doorOpen(this.getX(), (int) (y + speed)) && !Game.doorLocked) {
+            if ((int) y < Game.player.getY() && World.isFree(this.getX(), (int) (y + speed)) && !isColliding(this.getX(), (int) (y + speed)) && World.doorOpen(this.getX(), (int) (y + speed)) && !Game.doorLocked && !Game.onMessage) {
                 y += speed;
-            } else if ((int) y > Game.player.getY() && World.isFree(this.getX(), (int) (y - speed)) && !isColliding(this.getX(), (int) (y - speed)) && World.doorOpen(this.getX(), (int) (y - speed)) && !Game.doorLocked) {
+            } else if ((int) y > Game.player.getY() && World.isFree(this.getX(), (int) (y - speed)) && !isColliding(this.getX(), (int) (y - speed)) && World.doorOpen(this.getX(), (int) (y - speed)) && !Game.doorLocked && !Game.onMessage) {
                 y -= speed;
             }
         } else {
